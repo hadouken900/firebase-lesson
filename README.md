@@ -1,5 +1,6 @@
-# Firebase Firestore
+# Firebase
 
+## Часть 1. Firebase Firestore
 ![a](https://www.cybersecurity-help.cz/upload/iblock/ae2/ae2972c53a77d5b290fdb8ac6830495a.png)
 
 
@@ -12,7 +13,7 @@ Firebase Firestore - это база данных, которая изменяе
 * [Google Firebase]
 * [Firestore Documentation]
 
-# Теория
+### Теория
 
 Для того чтобы начать работать с Firestore нужно получить экземпляр класса FirebaseFirestore:
 ```java
@@ -106,13 +107,7 @@ db.collection("Название коллекции").document("название 
         });
     }
 ```
-
-
-
-
-
-
-# Подготовка:
+## Подготовка:
 - войти в гугл аккаунт на firebase.google.com
 - перейти в консоль 
 - создать проект
@@ -121,12 +116,102 @@ db.collection("Название коллекции").document("название 
 - скопировать файлы из этого репозитория в ваш проект (файлы java в папку java/ваша_папка/ , файлы xml в res/layout/)
 - поменять строчку package в каждом java файле
 
-# Задания:
-- 1 - добавление сообщения в firestore
-- 2 - добавление SnapshotListener для автоматического обновления списка сообщений
-- 3 - удаление сообщения из firestore
-- 4 - отсортировать сообщения на экране по дате
-- 5 - (дополнительно) изменить макеты
+## Задания:
+1. добавление сообщения в firestore
+2. добавление SnapshotListener для автоматического обновления списка сообщений
+3. удаление сообщения из firestore
+4. отсортировать сообщения на экране по дате
+5. (дополнительно) изменить макеты
+
+
+## Часть 2. Firebase Authentication
+
+Помимо хранения данных, в Firebase есть встроенный сервис аутентификации пользователей. Говорить о важности данной возможности, думаю, бессмысленно. Любое современное приложение имеет функцию добавления пользователей. Это позволяет разделять доступ, хранить личные данные в облаке, подстраивать функционал приложения под конкретного пользователя и т.д.
+Firebase Authentication позволяет выбрать разные способы аутентификации - по электронной почте и паролю, аккаунту в Facebook, Twitter или Google. 
+
+* [Firebase Authentication Documentation]
+
+### Теория 
+После подключения authentication к проекту, в нужной активности нужно добавить поле 
+```java
+private FirebaseAuth mAuth;
+```
+В методе onCreate иницаилизируем это поле
+```java
+mAuth = FirebaseAuth.getInstance();
+```
+
+Для регистрации пользователя через емейл и пароль
+```java
+mAuth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                
+                    // Успешная регистрация, можем получить пользователя и продолжить работу
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    
+                } else {
+                
+                    // Если что то пошло не так, то выводим toast
+                    Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                   
+                }
+
+            }
+        });
+```
+
+Для входа
+```java
+mAuth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    
+                    // Успешная вход, можем получить пользователя и продолжить работу
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    
+                } else {
+                
+                    // Если что то пошло не так, то выводим toast
+                    Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                   
+                  
+                }
+
+           
+            }
+        });
+```
+
+
+После запуска активности в методе OnStart можно проверить текущего пользователя 
+
+```java
+@Override
+public void onStart() {
+    super.onStart();
+    
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    
+}
+```
+
+## Подготовка:
+- подключить firebase authenticate в android studio
+- на сайте во вкладке authenticate выбрать метод для входа "Адрес электронной почти и пароль"
+
+## Задания:
+1. добавить возможность авторизации в приложение
+2. создать экран входа, который будет переносить пользователя в MainActivity после успешной авторизации
+3. создать экран для регистрации пользователей
+4. изменить макеты и классы так, чтобы при отправке сообщений было видно пользователя кто это сделал
 
   [Google Firebase]: <https://firebase.google.com>
   [Firestore Documentation]: <https://firebase.google.com/docs/firestore>
+  [Firebase Authentication Documentation]: <https://firebase.google.com/docs/auth>
