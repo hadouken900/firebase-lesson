@@ -266,7 +266,8 @@ public void addImage(View view) {
 
 ### Подготовка:
 - подключить firebase storage в android studio
-- для второго задания необходимо в сборщик gradle добавить зависимость:``` implementation 'com.squareup.picasso:picasso:2.71828' ```
+- для второго задания необходимо в сборщик gradle добавить зависимость:
+``` implementation 'com.squareup.picasso:picasso:2.71828' ```
 
 ### Задания:
 1. сохранить картинку в хранилище вместе с сообщением
