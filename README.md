@@ -212,6 +212,70 @@ public void onStart() {
 3. создать экран для регистрации пользователей
 4. изменить макеты и классы так, чтобы при отправке сообщений было видно пользователя кто это сделал
 
+## Часть 3. Firebase Storage
+
+Для хранения больших файлов, таких как изображения, музыка, видео, используется Firebase Storage.
+
+После подключения зависимостей, можно объявить такие поля:
+```java
+FirebaseStorage storage = FirebaseStorage.getInstance();
+StorageReference storageRef = storage.getReference();
+```
+Когда вам понадобится сохранить файл, в первую очередь нужно позаботиться о создании уникального имени, иначе данные будут перезаписываться. Например:
+```java
+//добавляем путь по которому будет лежать файл в хранилище
+StorageReference ref = storageRef.child("images").child("img_1");   //     ../images/img_1
+
+//сохраняем файл в хранилище
+ref.put(URI);
+```
+Где взять URI?
+
+Допустим у вас на макете есть кнопка с методом addImage и пустой ImageView
+```java
+
+//достаем картинку из галереи с помощью интента
+public void addImage(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //указываем тип. вместо звездочки можно поставить например png или jpg. звездочка означает все типы картинок
+        intent.setType("image/*");
+        
+        //запускаем intent. второй параметр это просто целочисленная константа
+        startActivityForResult(intent, GET_IMAGE);
+        
+        //далее открывается галерея, оттуда выбираем картинку
+    }
+
+//если всё ок, то достаем URI из полученой data
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_IMAGE && resultCode == RESULT_OK) {
+            if (data != null) {
+            
+                //вот этот Uri можно сохранить в хранилище
+                Uri imageUri = data.getData();
+                
+                //в imageView вставляем картинку по URI
+                image.setImageURI(imageUri);
+            }
+        }
+    }
+```
+
+### Подготовка:
+- подключить firebase storage в android studio
+- для второго задания необходимо в сборщик gradle добавить зависимость: implementation 'com.squareup.picasso:picasso:2.71828'
+
+### Задания:
+1. сохранить картинку в хранилище вместе с сообщением
+2. изменить макет и адаптер, чтобы если у сообщения есть прикрепленная картинка, то она показывалась (потребуется вспомнить библиотеку [Picasso] для загрузки картинки из интернета)
+
+
+
+
   [Google Firebase]: <https://firebase.google.com>
   [Firestore Documentation]: <https://firebase.google.com/docs/firestore>
   [Firebase Authentication Documentation]: <https://firebase.google.com/docs/auth>
+  [Picasso]: <https://square.github.io/picasso/>
