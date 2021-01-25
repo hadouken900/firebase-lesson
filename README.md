@@ -227,7 +227,10 @@ StorageReference storageRef = storage.getReference();
 StorageReference ref = storageRef.child("images").child("img_1");   //     ../images/img_1
 
 //сохраняем файл в хранилище
-ref.put(URI);
+ref.putFile(URI);
+
+//получаем созданный Uri
+ref.getDownloadUrl().getResult();
 ```
 Где взять URI?
 
